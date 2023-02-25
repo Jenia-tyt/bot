@@ -6,4 +6,11 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public interface MessageHandler {
     String getKey();
     SendMessage handle(Message message);
+    String getDescription();
+    
+    int getOrder();
+    
+    default boolean isIsShowInHelp() {
+        return true;
+    }
 }

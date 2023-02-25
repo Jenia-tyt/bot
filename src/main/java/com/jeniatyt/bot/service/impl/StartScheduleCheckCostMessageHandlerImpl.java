@@ -10,18 +10,25 @@ public class StartScheduleCheckCostMessageHandlerImpl implements MessageHandler 
     public static final String KEY_SSCC = "sscc";
     
     @Override
+    public int getOrder() {
+        return 9;
+    }
+    
+    @Override
     public String getKey() {
         return KEY_SSCC;
+    }
+    
+    @Override
+    public String getDescription() {
+        return "Запускаем крон который, присылает стоимость акций компании в диапазоне времени которое указали и кол-во раз";
     }
     
     @Override
     public SendMessage handle(Message message) {
         SendMessage answer = new SendMessage();
         answer.setChatId(message.getChatId());
-        answer.setText("""
-            Запускаем крон который,
-            присылает стоимость акций компании в диапазоне времени которое указали и кол-во раз
-            """);
+        answer.setText(getDescription());
         return answer;
     }
 }

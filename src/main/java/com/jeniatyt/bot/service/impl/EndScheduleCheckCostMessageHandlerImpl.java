@@ -10,8 +10,18 @@ public class EndScheduleCheckCostMessageHandlerImpl implements MessageHandler {
     public static final String KEY_ESCC = "escc";
     
     @Override
+    public int getOrder() {
+        return 10;
+    }
+    
+    @Override
     public String getKey() {
         return KEY_ESCC;
+    }
+    
+    @Override
+    public String getDescription() {
+        return "Завершаем крон по компании";
     }
     
     @Override

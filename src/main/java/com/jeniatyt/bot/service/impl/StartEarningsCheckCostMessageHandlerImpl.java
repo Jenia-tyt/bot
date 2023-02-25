@@ -11,18 +11,25 @@ public class StartEarningsCheckCostMessageHandlerImpl implements MessageHandler 
     public static final String KEY_SECC = "secc";
     
     @Override
+    public int getOrder() {
+        return 11;
+    }
+    
+    @Override
     public String getKey() {
         return KEY_SECC;
+    }
+    
+    @Override
+    public String getDescription() {
+        return "Запускаем крон который, присылает сколько заработал по сделанной сделки";
     }
     
     @Override
     public SendMessage handle(Message message) {
         SendMessage answer = new SendMessage();
         answer.setChatId(message.getChatId());
-        answer.setText("""
-            Запускаем крон который,
-            присылает сколько заработал
-            """);
+        answer.setText(getDescription());
         return answer;
     }
 }
