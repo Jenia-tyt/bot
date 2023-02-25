@@ -1,12 +1,14 @@
 package com.jeniatyt.bot;
 
-import com.jeniatyt.bot.service.iface.MessageHandler;
+import com.jeniatyt.bot.service.handler.iface.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -18,8 +20,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
-import static com.jeniatyt.bot.service.component.command.Commands.LIST_OF_COMMANDS;
-import static com.jeniatyt.bot.service.impl.DefaultMessageHandlerImpl.KEY_DEFAULT_HANDLER;
+import static com.jeniatyt.bot.component.command.Commands.LIST_OF_COMMANDS;
+import static com.jeniatyt.bot.service.handler.impl.DefaultMessageHandlerImpl.KEY_DEFAULT_HANDLER;
 
 
 @Slf4j
@@ -37,7 +39,7 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
     ) {
         super(token);
         this.botName = botName;
-        handlersMap = handlers.stream()
+        this.handlersMap = handlers.stream()
             .collect(
                 Collectors.toConcurrentMap(
                     MessageHandler::getKey,
@@ -58,10 +60,21 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         MessageHandler handler = handlersMap.getOrDefault(getKey(update), defaultHandler);
         try {
-            if (update.hasCallbackQuery()) {
-                execute(handler.handle(update.getCallbackQuery().getMessage()));
-            } else {
-                execute(handler.handle(update.getMessage()));
+            Message message;
+           if (update.hasCallbackQuery()) {
+               CallbackQuery callbackQuery = update.getCallbackQuery();
+               AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+               answerCallbackQuery.setCallbackQueryId(callbackQuery.getId());
+               execute(answerCallbackQuery);
+               
+               message = callbackQuery.getMessage();
+           } else {
+               message = update.getMessage();
+           }
+            
+            Optional<SendMessage> answer = handler.handle(message);
+            if (answer.isPresent()) {
+                execute(answer.get());
             }
         } catch (TelegramApiException e) {
             log.error("Ошибка в обработчике", e);
