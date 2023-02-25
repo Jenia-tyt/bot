@@ -50,7 +50,7 @@ public class HelpMessageHandlerImpl implements MessageHandler {
     private String getMassage() {
         StringBuilder builder = new StringBuilder();
         handlers.stream()
-            .filter(MessageHandler::isIsShowInHelp)
+            .filter(MessageHandler::isShowInHelp)
             .sorted(Comparator.comparing(MessageHandler::getOrder))
             .forEach(mh -> builder.append("- ").append(mh.getKey()).append("  ->  ").append(mh.getDescription()).append("\n"));
         return builder.toString();

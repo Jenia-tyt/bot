@@ -10,7 +10,7 @@ public interface MessageHandler {
     
     int getOrder();
     
-    default boolean isIsShowInHelp() {
+    default boolean isShowInHelp() {
         return true;
     }
 }

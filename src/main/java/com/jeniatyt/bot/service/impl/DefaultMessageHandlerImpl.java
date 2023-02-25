@@ -31,7 +31,7 @@ public class DefaultMessageHandlerImpl implements MessageHandler {
     }
     
     @Override
-    public boolean isIsShowInHelp() {
+    public boolean isShowInHelp() {
         return false;
     }
     
