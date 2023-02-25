@@ -9,9 +9,8 @@ import static com.jeniatyt.bot.service.impl.DayCompanyInfoMessageHandlerImpl.KEY
 @Component
 public class DayCompanyInfoButton implements Button {
     public static final InlineKeyboardButton DAY_INFO_BUTTON = new InlineKeyboardButton("Инф. за день");
-    private static final String DATA = KEY_DCI;
     
     public DayCompanyInfoButton() {
-        DAY_INFO_BUTTON.setCallbackData(DATA);
+        DAY_INFO_BUTTON.setCallbackData(KEY_DCI);
     }
 }

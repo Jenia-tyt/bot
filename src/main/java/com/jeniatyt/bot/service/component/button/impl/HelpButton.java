@@ -9,9 +9,8 @@ import static com.jeniatyt.bot.service.impl.HelpMessageHandlerImpl.KEY_HELP;
 @Component
 public class HelpButton implements Button {
     public static final InlineKeyboardButton HELP_BUTTON = new InlineKeyboardButton("help");
-    private static final String DATA = KEY_HELP;
     
     public HelpButton() {
-        HELP_BUTTON.setCallbackData(DATA);
+        HELP_BUTTON.setCallbackData(KEY_HELP);
     }
 }

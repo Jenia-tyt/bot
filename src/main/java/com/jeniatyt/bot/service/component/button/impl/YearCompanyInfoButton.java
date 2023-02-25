@@ -9,9 +9,8 @@ import static com.jeniatyt.bot.service.impl.YearCompanyInfoMessageHandlerImpl.KE
 @Component
 public class YearCompanyInfoButton implements Button {
     public static final InlineKeyboardButton YEAR_INFO_BUTTON = new InlineKeyboardButton("Инф. за год");
-    private static final String DATA = KEY_YCI;
     
     public YearCompanyInfoButton() {
-        YEAR_INFO_BUTTON.setCallbackData(DATA);
+        YEAR_INFO_BUTTON.setCallbackData(KEY_YCI);
     }
 }

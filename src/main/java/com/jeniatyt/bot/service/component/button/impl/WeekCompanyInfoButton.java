@@ -9,9 +9,8 @@ import static com.jeniatyt.bot.service.impl.WeekCompanyInfoMessageHandlerImpl.KE
 @Component
 public class WeekCompanyInfoButton implements Button {
     public static final InlineKeyboardButton WEEK_INFO_BUTTON = new InlineKeyboardButton("Инф. за неделю");
-    private static final String DATA = KEY_WCI;
     
     public WeekCompanyInfoButton() {
-        WEEK_INFO_BUTTON.setCallbackData(DATA);
+        WEEK_INFO_BUTTON.setCallbackData(KEY_WCI);
     }
 }

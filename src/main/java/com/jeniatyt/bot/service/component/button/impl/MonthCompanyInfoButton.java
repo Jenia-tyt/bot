@@ -9,9 +9,8 @@ import static com.jeniatyt.bot.service.impl.MonthCompanyInfoMessageHandlerImpl.K
 @Component
 public class MonthCompanyInfoButton implements Button {
     public static final InlineKeyboardButton MONTH_INFO_BUTTON = new InlineKeyboardButton("Инф. за месяц");
-    private static final String DATA = KEY_MCI;
     
     public MonthCompanyInfoButton() {
-        MONTH_INFO_BUTTON.setCallbackData(DATA);
+        MONTH_INFO_BUTTON.setCallbackData(KEY_MCI);
     }
 }
