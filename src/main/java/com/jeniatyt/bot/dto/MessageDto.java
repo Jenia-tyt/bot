@@ -10,6 +10,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageDto implements Serializable {
+    private String handelKey;
     private String chatId;
     private int messageId;
     private String data;

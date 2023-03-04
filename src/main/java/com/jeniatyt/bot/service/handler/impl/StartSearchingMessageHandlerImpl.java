@@ -37,7 +37,12 @@ public class StartSearchingMessageHandlerImpl implements MessageHandler {
     @Override
     public Optional<SendMessage> handle(Message message) {
         sender.send(
-            new MessageDto(message.getChatId().toString(), message.getMessageId(), message.getText()),
+            new MessageDto(
+                message.getText(),
+                message.getChatId().toString(),
+                message.getMessageId(),
+                ""
+            ),
             REQUEST_START_STOP_BROKER_TOPIC
         );
     
