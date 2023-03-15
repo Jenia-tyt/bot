@@ -40,6 +40,7 @@ public class StartSearchingMessageHandlerImpl implements MessageHandler {
             new MessageDto(
                 message.getText(),
                 message.getChatId().toString(),
+                new double[0],
                 message.getMessageId(),
                 ""
             ),

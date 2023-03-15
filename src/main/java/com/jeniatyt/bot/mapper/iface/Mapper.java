@@ -1,6 +1,9 @@
 package com.jeniatyt.bot.mapper.iface;
 
-public interface Mapper<T,O> {
-    T to(O dto);
-    O from(T target);
+public interface Mapper<M, F, O> {
+    M toMessage(O dto);
+    
+    F toFotoMessage(O dto);
+    
+    O from(M message);
 }
