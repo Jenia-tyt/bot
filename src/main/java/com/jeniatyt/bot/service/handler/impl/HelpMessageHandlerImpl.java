@@ -1,17 +1,14 @@
 package com.jeniatyt.bot.service.handler.impl;
 
 import com.jeniatyt.bot.component.button.ButtonUtils;
+import com.jeniatyt.bot.component.button.impl.HelpButton;
 import com.jeniatyt.bot.service.handler.iface.MessageHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.Set;
-
-import static com.jeniatyt.bot.component.button.impl.HelpButton.HELP_BUTTON;
 
 
 @Service
@@ -36,17 +33,13 @@ public class HelpMessageHandlerImpl implements MessageHandler {
     }
     
     @Override
-    public Optional<SendMessage> handle(Message message) {
-        SendMessage answer = new SendMessage();
-        answer.setReplyToMessageId(message.getMessageId());
-        answer.setChatId(message.getChatId());
+    public void enrichAnswer(SendMessage answer) {
         answer.setText(getMassage());
         answer.setReplyMarkup(
             ButtonUtils.inlineMarkup(
-                HELP_BUTTON
+                new HelpButton().get()
             )
         );
-        return Optional.of(answer);
     }
     
     private String getMassage() {

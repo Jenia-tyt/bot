@@ -5,9 +5,6 @@ import com.jeniatyt.bot.service.queue.iface.MessageSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +29,9 @@ public class StatisticsMessageHandlerImpl implements MessageHandler {
     }
     
     @Override
-    public Optional<SendMessage> handle(Message message) {
-        SendMessage answer = new SendMessage();
-        answer.setReplyToMessageId(message.getMessageId());
-        answer.setChatId(message.getChatId());
+    public void enrichAnswer(SendMessage answer) {
         answer.setText("Сообщение приняли в обработку\n" + getDescription());
-        
+
 //        sender.send(message, REQUEST_STATISTIC_BROKER_TOPIC);
-    
-        return Optional.of(answer);
     }
 }

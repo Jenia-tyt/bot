@@ -1,4 +1,4 @@
-package com.jeniatyt.bot.dto;
+package com.jeniatyt.bot.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class MessageDto implements Serializable {
     private String handelKey;
     private String chatId;
-    private double[] chartPoints;
     private int messageId;
     private String data;
 }

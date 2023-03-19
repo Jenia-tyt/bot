@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
@@ -29,7 +30,6 @@ import static com.jeniatyt.bot.service.handler.impl.DefaultMessageHandlerImpl.KE
 public class TelegramBotMessageHandler extends TelegramLongPollingBot {
     private final String botName;
     private final ConcurrentMap<String, MessageHandler> handlersMap;
-    private final MessageHandler defaultHandler;
     
     public TelegramBotMessageHandler(
         @Value("${bot.name}")String botName,
@@ -46,7 +46,6 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
                     e -> e
                 )
             );
-        this.defaultHandler = defaultHandler;
     
         //TODO добавить работу только с авторизованными пользователями
         try {
@@ -58,7 +57,8 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
     
     @Override
     public void onUpdateReceived(Update update) {
-        MessageHandler handler = handlersMap.getOrDefault(getKey(update), defaultHandler);
+        String[] command = parseCommand(update);
+        MessageHandler handler = handlersMap.get(command[0]);
         try {
             Message message;
            if (update.hasCallbackQuery()) {
@@ -72,7 +72,7 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
                message = update.getMessage();
            }
             
-            Optional<SendMessage> answer = handler.handle(message);
+            Optional<SendMessage> answer = handler.handle(message,  Arrays.copyOfRange(command, 1, command.length));
             if (answer.isPresent()) {
                 execute(answer.get());
             }
@@ -86,22 +86,24 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
         return botName;
     }
     
-    private String getKey(Update update) {
+    private String[] parseCommand(Update update) {
         return update.hasCallbackQuery() ?
             
             Optional.ofNullable(update.getCallbackQuery())
                 .map(CallbackQuery::getData)
                 .map(this::extract)
-                .orElse(KEY_DEFAULT_HANDLER) :
+                .orElse(new String[] {KEY_DEFAULT_HANDLER}) :
             
             Optional.of(update.getMessage())
                 .map(Message::getText)
                 .map(String::toLowerCase)
                 .map(this::extract)
-                .orElse(KEY_DEFAULT_HANDLER);
+                .orElse(new String[] {KEY_DEFAULT_HANDLER});
     }
     
-    private String extract(String str) {
-        return str.split(" ")[0].replace("/", "");
+    private String[] extract(String str) {
+        String[] split = str.split(" ");
+        split[0] = split[0].replace("/", "");
+        return split;
     }
 }

@@ -1,7 +1,7 @@
 package com.jeniatyt.bot.mapper.impl;
 
-import com.jeniatyt.bot.dto.MessageDto;
 import com.jeniatyt.bot.mapper.iface.Mapper;
+import com.jeniatyt.bot.model.dto.MessageDto;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

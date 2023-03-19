@@ -2,7 +2,7 @@ package com.jeniatyt.bot.service.queue.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jeniatyt.bot.dto.MessageDto;
+import com.jeniatyt.bot.model.dto.MessageDto;
 import com.jeniatyt.bot.service.queue.iface.MessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -7,10 +7,19 @@ import java.util.Optional;
 
 public interface MessageHandler {
     String getKey();
-    Optional<SendMessage> handle(Message message);
     String getDescription();
-    
     int getOrder();
+    default Optional<SendMessage> handle(Message message, String[] arg) {
+        SendMessage answer = new SendMessage();
+        answer.setReplyToMessageId(message.getMessageId());
+        answer.setChatId(message.getChatId());
+        answer.setText(getDescription());
+        enrichAnswer(answer);
+        return Optional.of(answer);
+    }
+    
+    default void enrichAnswer(SendMessage answer) {
+    }
     
     default boolean isShowInHelp() {
         return true;

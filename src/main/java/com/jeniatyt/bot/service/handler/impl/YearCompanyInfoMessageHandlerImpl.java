@@ -1,15 +1,11 @@
 package com.jeniatyt.bot.service.handler.impl;
 
 import com.jeniatyt.bot.component.button.ButtonUtils;
+import com.jeniatyt.bot.component.button.impl.MonthCompanyInfoButton;
+import com.jeniatyt.bot.component.button.impl.WeekCompanyInfoButton;
 import com.jeniatyt.bot.service.handler.iface.MessageHandler;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
-import java.util.Optional;
-
-import static com.jeniatyt.bot.component.button.impl.MonthCompanyInfoButton.MONTH_INFO_BUTTON;
-import static com.jeniatyt.bot.component.button.impl.WeekCompanyInfoButton.WEEK_INFO_BUTTON;
 
 @Service
 public class YearCompanyInfoMessageHandlerImpl implements MessageHandler {
@@ -31,17 +27,12 @@ public class YearCompanyInfoMessageHandlerImpl implements MessageHandler {
     }
     
     @Override
-    public Optional<SendMessage> handle(Message message) {
-        SendMessage answer = new SendMessage();
-        answer.setReplyToMessageId(message.getMessageId());
-        answer.setChatId(message.getChatId());
-        answer.setText(getDescription());
+    public void enrichAnswer(SendMessage answer) {
         answer.setReplyMarkup(
             ButtonUtils.inlineMarkup(
-                MONTH_INFO_BUTTON,
-                WEEK_INFO_BUTTON
+                new MonthCompanyInfoButton().get(),
+                new WeekCompanyInfoButton().get()
             )
         );
-        return Optional.of(answer);
     }
 }
