@@ -2,6 +2,7 @@ package com.jeniatyt.bot.service.queue.listner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jeniatyt.bot.component.button.impl.ClearAllExcludeCompaniesButton;
 import com.jeniatyt.bot.component.button.impl.ExcludeCompanyButton;
 import com.jeniatyt.bot.model.dto.CompanyMessageDto;
 import com.jeniatyt.bot.model.dto.MessageDto;
@@ -12,6 +13,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import static com.jeniatyt.bot.config.KafkaConfig.GROUP_ID;
+import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_ALL_EXCLUDE_COMPANIES;
+import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_START_BROKER_TOPIC;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_STATISTIC_BROKER_TOPIC;
 
@@ -60,6 +63,33 @@ public class KListener {
             answerSender.send(dto, RESPONSE_STATISTIC_BROKER_TOPIC);
         } catch (JsonProcessingException e) {
             log.error(RESPONSE_STATISTIC_BROKER_TOPIC, e);
+        }
+    }
+    
+    @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_ALL_EXCLUDE_COMPANIES)
+    public void allExcludeCompaniesListener(String message) {
+        try {
+            MessageDto dto = mapper.readValue(message, MessageDto.class);
+            answerSender.send(
+                dto,
+                RESPONSE_ALL_EXCLUDE_COMPANIES,
+                new ClearAllExcludeCompaniesButton().get()
+            );
+        } catch (JsonProcessingException e) {
+            log.error(RESPONSE_ALL_EXCLUDE_COMPANIES, e);
+        }
+    }
+    
+    @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES)
+    public void clearAllExcludeCompaniesListener(String message) {
+        try {
+            MessageDto dto = mapper.readValue(message, MessageDto.class);
+            answerSender.send(
+                dto,
+                RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES
+            );
+        } catch (JsonProcessingException e) {
+            log.error(RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES, e);
         }
     }
 }

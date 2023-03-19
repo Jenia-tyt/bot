@@ -22,19 +22,10 @@ public class TelegramAnswerSenderImpl implements TelegramAnswerSender {
     @Override
     public <M extends MessageDto> void send(M dto, String topic, InlineKeyboardButton... buttons) {
         try {
-//            if (dto.getChartPoints().length == 0) {
-                
-                
-                SendMessage sendMessage = sendMessageMapper.toMessage(dto);
-                sendMessage.setReplyMarkup(ButtonUtils.inlineMarkup(buttons));
-                messageHandler.execute(sendMessage);
-                
-                
-//            } else {
-//                SendPhoto sendPhoto = sendMessageMapper.toFotoMessage(dto);
-//                sendPhoto.setReplyMarkup(ButtonUtils.inlineMarkup(buttons));
-//                messageHandler.execute(sendPhoto);
-//            }
+            //TODO тут добавлять отрисовщик графиков
+            SendMessage sendMessage = sendMessageMapper.toMessage(dto);
+            sendMessage.setReplyMarkup(ButtonUtils.inlineMarkup(buttons));
+            messageHandler.execute(sendMessage);
         } catch (TelegramApiException e) {
             log.error(topic, e);
         }

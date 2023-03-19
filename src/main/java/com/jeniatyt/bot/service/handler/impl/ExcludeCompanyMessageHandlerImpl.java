@@ -18,7 +18,7 @@ public class ExcludeCompanyMessageHandlerImpl implements MessageHandler {
     public static final String KEY_EC = "ec";
     
     private final MessageSender sender;
-    //TODO добавить на очистку исключенных компаний
+    
     @Override
     public String getKey() {
         return KEY_EC;
