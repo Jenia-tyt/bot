@@ -19,6 +19,6 @@ public class StartScheduleCheckCostMessageHandlerImpl implements MessageHandler 
     
     @Override
     public String getDescription() {
-        return "Запускаем крон который, присылает стоимость акций компании в диапазоне времени которое указали и кол-во раз";
+        return "Запускаем крон который, присылает стоимость акций компании в диапазоне времени которое указали и кол-во раз НЕРЕАЛИЗОВАННО";
     }
 }

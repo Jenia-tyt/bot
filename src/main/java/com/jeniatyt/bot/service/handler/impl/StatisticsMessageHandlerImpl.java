@@ -25,7 +25,7 @@ public class StatisticsMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Возвращает всю статистику операций и итог баланс и прибыль";
+        return "Возвращает всю статистику операций и итог баланс и прибыль НЕРЕАЛИЗОВАННО";
     }
     
     @Override

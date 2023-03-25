@@ -31,7 +31,7 @@ public class ExcludeCompanyMessageHandlerImpl implements MessageHandler {
                 KEY_EC,
                 message.getChatId().toString(),
                 message.getMessageId(),
-                arg[0]
+                arg[0].toUpperCase()
             ),
             REQUEST_EXCLUDE_COMPANY_BROKER_TOPIC
         );
@@ -41,7 +41,7 @@ public class ExcludeCompanyMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Исключает компанию из поиска";
+        return "Исключает компанию из поиска [команда SicId] НЕРЕАЛИЗОВАННО";
     }
     
     @Override

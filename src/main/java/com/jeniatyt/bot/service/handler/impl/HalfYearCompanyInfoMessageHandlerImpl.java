@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Service
-public class YearCompanyInfoMessageHandlerImpl implements MessageHandler {
-    public static final String KEY_YCI = "yci";
+public class HalfYearCompanyInfoMessageHandlerImpl implements MessageHandler {
+    public static final String KEY_HYCI = "hyci";
     
     @Override
     public int getOrder() {
@@ -18,12 +18,12 @@ public class YearCompanyInfoMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getKey() {
-        return KEY_YCI;
+        return KEY_HYCI;
     }
     
     @Override
     public String getDescription() {
-        return "Информация по компании за год";
+        return "Информация по компании за пол год";
     }
     
     @Override

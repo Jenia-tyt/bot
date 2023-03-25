@@ -19,6 +19,6 @@ public class EndScheduleCheckCostMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Завершаем крон по компании";
+        return "Завершаем крон по компании НЕРЕАЛИЗОВАННО";
     }
 }

@@ -20,6 +20,6 @@ public class EndEarningsCheckCostMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Останавливает крон, присылает итоговый заработок";
+        return "Останавливает крон, присылает итоговый заработок НЕРЕАЛИЗОВАННО";
     }
 }

@@ -20,6 +20,6 @@ public class StartEarningsCheckCostMessageHandlerImpl implements MessageHandler 
     
     @Override
     public String getDescription() {
-        return "Запускаем крон который, присылает сколько заработал по сделанной сделки";
+        return "Запускаем крон который, присылает сколько заработал по сделанной сделки НЕРЕАЛИЗОВАННО";
     }
 }

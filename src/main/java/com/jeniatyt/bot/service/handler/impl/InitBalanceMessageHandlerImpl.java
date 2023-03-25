@@ -19,6 +19,6 @@ public class InitBalanceMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Инициализируешь/обновляешь свой баланс";
+        return "Инициализируешь/обновляешь свой баланс НЕРЕАЛИЗОВАННО";
     }
 }

@@ -19,6 +19,6 @@ public class DayCompanyInfoMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Информация по компании за день";
+        return "Информация по компании за день НЕРЕАЛИЗОВАННО";
     }
 }

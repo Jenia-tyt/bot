@@ -47,7 +47,16 @@ public class HelpMessageHandlerImpl implements MessageHandler {
         handlers.stream()
             .filter(MessageHandler::isShowInHelp)
             .sorted(Comparator.comparing(MessageHandler::getOrder))
-            .forEach(mh -> builder.append("- ").append(mh.getKey()).append("  ->  ").append(mh.getDescription()).append("\n"));
+            .forEach(mh ->
+                builder
+                    .append("- ")
+                    .append(mh.getKey())
+                    .append("\t")
+                    .append(">>")
+                    .append("\t")
+                    .append(mh.getDescription())
+                    .append("\n\n")
+            );
         return builder.toString();
     }
 }

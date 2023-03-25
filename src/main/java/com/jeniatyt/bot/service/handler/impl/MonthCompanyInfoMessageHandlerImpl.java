@@ -23,7 +23,7 @@ public class MonthCompanyInfoMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Информация по компании за месяц";
+        return "Информация по компании за месяц НЕРЕАЛИЗОВАННО";
     }
     
     @Override

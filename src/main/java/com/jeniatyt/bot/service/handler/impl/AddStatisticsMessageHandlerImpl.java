@@ -19,6 +19,6 @@ public class AddStatisticsMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Добавить статистику о сделке";
+        return "Добавить статистику о сделке НЕРЕАЛИЗОВАННО";
     }
 }
