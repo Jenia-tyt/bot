@@ -8,8 +8,8 @@ import static com.jeniatyt.bot.service.handler.impl.DayCompanyInfoMessageHandler
 public class DayCompanyInfoButton implements Button {
     private static final InlineKeyboardButton DAY_COMPANY_INFO_BUTTON = new InlineKeyboardButton("Инф. за день");
     
-    public DayCompanyInfoButton() {
-        DAY_COMPANY_INFO_BUTTON.setCallbackData(KEY_DCI);
+    public DayCompanyInfoButton(String secId) {
+        DAY_COMPANY_INFO_BUTTON.setCallbackData(KEY_DCI + " " + secId);
     }
     
     @Override

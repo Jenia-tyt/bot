@@ -8,8 +8,8 @@ import static com.jeniatyt.bot.service.handler.impl.MonthCompanyInfoMessageHandl
 public class MonthCompanyInfoButton implements Button {
     private static final InlineKeyboardButton MONTH_INFO_BUTTON = new InlineKeyboardButton("Инф. за месяц");
     
-    public MonthCompanyInfoButton() {
-        MONTH_INFO_BUTTON.setCallbackData(KEY_MCI);
+    public MonthCompanyInfoButton(String sicId) {
+        MONTH_INFO_BUTTON.setCallbackData(KEY_MCI + " " + sicId);
     }
     
     @Override

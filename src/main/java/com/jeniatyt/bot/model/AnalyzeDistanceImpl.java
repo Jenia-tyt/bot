@@ -7,18 +7,17 @@ import java.io.Serializable;
 
 @Getter
 @RequiredArgsConstructor
-public enum AnalyzeDistanceImpl implements AnalyzeDistance, Serializable {
-    HALF_YEAR(24, "Пол года", "Неделя"),
-    MONTH(4, "Месяц", "Неделя"),
-    WEEK(7, "Неделя", "День"),
-    DAY(24, "День", "Час");
+public enum AnalyzeDistanceImpl implements Serializable {
+    HALF_YEAR(24, 7, "Пол года", "Неделя"),
+    MONTH(4, 7,"Месяц", "Неделя"),
+    WEEK(7, 24, "Неделя", "День"),
+    DAY(24, 60, "День", "Час");
     
-    private final int periodDistance;
+    private final int size;
+    private final int interval;
     private final String nameDistance;
     private final String dimension;
     
-    
-    @Override
     public String getDescription() {
         return getNameDistance() + ", " + getDimension();
     }

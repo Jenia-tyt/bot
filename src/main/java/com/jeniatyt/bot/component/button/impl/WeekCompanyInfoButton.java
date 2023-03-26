@@ -8,8 +8,8 @@ import static com.jeniatyt.bot.service.handler.impl.WeekCompanyInfoMessageHandle
 public class WeekCompanyInfoButton implements Button {
     private static final InlineKeyboardButton WEEK_INFO_BUTTON = new InlineKeyboardButton("Инф. за неделю");
     
-    public WeekCompanyInfoButton() {
-        WEEK_INFO_BUTTON.setCallbackData(KEY_WCI);
+    public WeekCompanyInfoButton(String sicId) {
+        WEEK_INFO_BUTTON.setCallbackData(KEY_WCI + " " + sicId);
     }
     
     @Override

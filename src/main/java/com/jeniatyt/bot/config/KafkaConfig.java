@@ -18,12 +18,18 @@ public class KafkaConfig {
     public static final String REQUEST_CLEAR_ALL_EXCLUDE_COMPANIES = "REQUEST_CLEAR_ALL_EXCLUDE_COMPANIES";
     public static final String REQUEST_ALL_EXCLUDE_COMPANIES = "REQUEST_ALL_EXCLUDE_COMPANIES";
     public static final String REQUEST_HALF_YEAR_ANALYSIS = "REQUEST_HALF_YEAR_ANALYSIS";
+    public static final String REQUEST_MONTH_ANALYSIS = "REQUEST_MONTH_ANALYSIS";
+    public static final String REQUEST_WEEK_ANALYSIS = "REQUEST_WEEK_ANALYSIS";
+    public static final String REQUEST_DAY_ANALYSIS = "REQUEST_DAY_ANALYSIS";
     
     public static final String RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES = "RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES";
     public static final String RESPONSE_ALL_EXCLUDE_COMPANIES = "RESPONSE_ALL_EXCLUDE_COMPANIES";
     public static final String RESPONSE_START_BROKER_TOPIC = "RESPONSE_START_BROKER_TOPIC";
     public static final String RESPONSE_STATISTIC_BROKER_TOPIC = "RESPONSE_STATISTIC_BROKER_TOPIC";
     public static final String RESPONSE_HALF_YEAR_ANALYSIS = "RESPONSE_HALF_YEAR_ANALYSIS";
+    public static final String RESPONSE_MONTH_ANALYSIS = "RESPONSE_MONTH_ANALYSIS";
+    public static final String RESPONSE_WEEK_ANALYSIS = "RESPONSE_WEEK_ANALYSIS";
+    public static final String RESPONSE_DAY_ANALYSIS = "RESPONSE_DAY_ANALYSIS";
     
     @Bean
     public NewTopic requestStartStopTopic() {
@@ -79,6 +85,33 @@ public class KafkaConfig {
             .build();
     }
     
+    @Bean
+    public NewTopic requestMonthAnalysis() {
+        return TopicBuilder
+            .name(REQUEST_MONTH_ANALYSIS)
+            .partitions(1)
+            .replicas(-1)
+            .build();
+    }
+    
+    @Bean
+    public NewTopic requestWeekAnalysis() {
+        return TopicBuilder
+            .name(REQUEST_WEEK_ANALYSIS)
+            .partitions(1)
+            .replicas(-1)
+            .build();
+    }
+    
+    @Bean
+    public NewTopic requestDayAnalysis() {
+        return TopicBuilder
+            .name(REQUEST_DAY_ANALYSIS)
+            .partitions(1)
+            .replicas(-1)
+            .build();
+    }
+    
 //    =====================================================================
     
     @Bean
@@ -121,6 +154,33 @@ public class KafkaConfig {
     public NewTopic responseHalfYearAnalysis() {
         return TopicBuilder
             .name(RESPONSE_HALF_YEAR_ANALYSIS)
+            .partitions(1)
+            .replicas(-1)
+            .build();
+    }
+    
+    @Bean
+    public NewTopic responseMonthAnalysis() {
+        return TopicBuilder
+            .name(RESPONSE_MONTH_ANALYSIS)
+            .partitions(1)
+            .replicas(-1)
+            .build();
+    }
+    
+    @Bean
+    public NewTopic responseWeekAnalysis() {
+        return TopicBuilder
+            .name(RESPONSE_WEEK_ANALYSIS)
+            .partitions(1)
+            .replicas(-1)
+            .build();
+    }
+    
+    @Bean
+    public NewTopic responseDayAnalysis() {
+        return TopicBuilder
+            .name(RESPONSE_DAY_ANALYSIS)
             .partitions(1)
             .replicas(-1)
             .build();

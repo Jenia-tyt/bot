@@ -26,7 +26,7 @@ public class DrawServiceImpl implements DrawService {
     @Override
     public InputFile draw(CompanyMessageDto dto) throws IOException {
         JFreeChart lineChartObject = ChartFactory.createLineChart(
-            dto.getCompany().getName(),
+            dto.getCompany().toString(),
             String.format(dto.getAnalyzeDistance().getDescription()),
             "СТОИМОСТЬ, рубль",
             createDataSet(dto.getCost()),
@@ -50,8 +50,10 @@ public class DrawServiceImpl implements DrawService {
     private DefaultCategoryDataset createDataSet(double[] points) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         
+        int count = 1;
         for (int i = points.length - 1; i >= 0; i--) {
-            dataset.addValue(points[i], "", String.valueOf(i));
+            dataset.addValue(points[i], "", String.valueOf(count));
+            count++;
         }
         
         return dataset;

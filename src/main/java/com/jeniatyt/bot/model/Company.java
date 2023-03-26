@@ -11,4 +11,11 @@ public class Company implements Serializable {
     private String secId;
     private String name;
     private String regNumber;
+    
+    @Override
+    public String toString() {
+        return name == null
+            ? "SecId " + secId
+            : "Имя " + name + " SecId " + secId;
+    }
 }
