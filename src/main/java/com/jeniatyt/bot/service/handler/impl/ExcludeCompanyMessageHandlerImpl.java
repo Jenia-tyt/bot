@@ -41,7 +41,7 @@ public class ExcludeCompanyMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Исключает компанию из поиска [команда SicId] НЕРЕАЛИЗОВАННО";
+        return "Исключает компанию из поиска [команда sicId]";
     }
     
     @Override

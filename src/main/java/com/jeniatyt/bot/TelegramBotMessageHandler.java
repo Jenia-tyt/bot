@@ -30,6 +30,7 @@ import static com.jeniatyt.bot.service.handler.impl.DefaultMessageHandlerImpl.KE
 public class TelegramBotMessageHandler extends TelegramLongPollingBot {
     private final String botName;
     private final ConcurrentMap<String, MessageHandler> handlersMap;
+    private final MessageHandler defaultHandler;
     
     public TelegramBotMessageHandler(
         @Value("${bot.name}")String botName,
@@ -39,6 +40,7 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
     ) {
         super(token);
         this.botName = botName;
+        this.defaultHandler = defaultHandler;
         this.handlersMap = handlers.stream()
             .collect(
                 Collectors.toConcurrentMap(
@@ -58,7 +60,7 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         String[] command = parseCommand(update);
-        MessageHandler handler = handlersMap.get(command[0]);
+        MessageHandler handler = handlersMap.getOrDefault(command[0], defaultHandler);
         try {
             Message message;
            if (update.hasCallbackQuery()) {
@@ -104,6 +106,9 @@ public class TelegramBotMessageHandler extends TelegramLongPollingBot {
     private String[] extract(String str) {
         String[] split = str.split(" ");
         split[0] = split[0].replace("/", "");
+        for (int i = 0; i < split.length - 1; i++) {
+            split[i] = split[i].trim();
+        }
         return split;
     }
 }

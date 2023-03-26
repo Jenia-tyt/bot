@@ -27,7 +27,7 @@ public class DrawServiceImpl implements DrawService {
     public InputFile draw(CompanyMessageDto dto) throws IOException {
         JFreeChart lineChartObject = ChartFactory.createLineChart(
             dto.getCompany().getName(),
-            String.format("ВРЕМЯ, %s", dto.getStep().getDistance()),
+            String.format(dto.getAnalyzeDistance().getDescription()),
             "СТОИМОСТЬ, рубль",
             createDataSet(dto.getCost()),
             PlotOrientation.VERTICAL,

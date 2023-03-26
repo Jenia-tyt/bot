@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeniatyt.bot.component.button.impl.ClearAllExcludeCompaniesButton;
 import com.jeniatyt.bot.component.button.impl.ExcludeCompanyButton;
+import com.jeniatyt.bot.component.button.impl.MonthCompanyInfoButton;
 import com.jeniatyt.bot.model.dto.CompanyMessageDto;
 import com.jeniatyt.bot.model.dto.MessageDto;
 import com.jeniatyt.bot.service.queue.iface.TelegramAnswerSender;
@@ -13,8 +14,10 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import static com.jeniatyt.bot.config.KafkaConfig.GROUP_ID;
+import static com.jeniatyt.bot.config.KafkaConfig.REQUEST_HALF_YEAR_ANALYSIS;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_ALL_EXCLUDE_COMPANIES;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES;
+import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_HALF_YEAR_ANALYSIS;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_START_BROKER_TOPIC;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_STATISTIC_BROKER_TOPIC;
 
@@ -90,6 +93,21 @@ public class KListener {
             );
         } catch (JsonProcessingException e) {
             log.error(RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES, e);
+        }
+    }
+    
+    @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_HALF_YEAR_ANALYSIS)
+    public void halfYearAnalysisListener(String message) {
+        try {
+            CompanyMessageDto response = mapper.readValue(message, CompanyMessageDto.class);
+            answerSender.send(
+                response,
+                REQUEST_HALF_YEAR_ANALYSIS,
+                new ExcludeCompanyButton(response.getCompany().getSecId()).get(),
+                new MonthCompanyInfoButton().get()
+            );
+        } catch (JsonProcessingException e) {
+            log.error(REQUEST_HALF_YEAR_ANALYSIS, e);
         }
     }
 }
