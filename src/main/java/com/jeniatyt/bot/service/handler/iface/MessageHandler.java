@@ -18,6 +18,14 @@ public interface MessageHandler {
         return Optional.of(answer);
     }
     
+    default String getArguments(String[] args) {
+        StringBuilder builder = new StringBuilder();
+        for (String str : args) {
+            builder.append(str.toUpperCase()).append(" ");
+        }
+        return builder.toString();
+    }
+    
     default void enrichAnswer(SendMessage answer) {
     }
     

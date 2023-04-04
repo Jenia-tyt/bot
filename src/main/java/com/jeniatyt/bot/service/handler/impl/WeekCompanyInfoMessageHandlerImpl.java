@@ -31,7 +31,7 @@ public class WeekCompanyInfoMessageHandlerImpl implements MessageHandler {
     
     @Override
     public String getDescription() {
-        return "Информация по компании за неделю НЕРЕАЛИЗОВАННО";
+        return "Информация по компании за неделю [команда sicId]";
     }
     
     @Override

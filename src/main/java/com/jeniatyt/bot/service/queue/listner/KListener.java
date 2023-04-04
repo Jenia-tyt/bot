@@ -7,6 +7,7 @@ import com.jeniatyt.bot.component.button.impl.ClearAllExcludeCompaniesButton;
 import com.jeniatyt.bot.component.button.impl.DayCompanyInfoButton;
 import com.jeniatyt.bot.component.button.impl.ExcludeCompanyButton;
 import com.jeniatyt.bot.component.button.impl.MonthCompanyInfoButton;
+import com.jeniatyt.bot.component.button.impl.StopCronButton;
 import com.jeniatyt.bot.component.button.impl.WeekCompanyInfoButton;
 import com.jeniatyt.bot.model.dto.CompanyMessageDto;
 import com.jeniatyt.bot.model.dto.MessageDto;
@@ -21,11 +22,13 @@ import java.util.function.Function;
 import static com.jeniatyt.bot.config.KafkaConfig.GROUP_ID;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_ALL_EXCLUDE_COMPANIES;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES;
+import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_CRON;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_DAY_ANALYSIS;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_HALF_YEAR_ANALYSIS;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_MONTH_ANALYSIS;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_START_BROKER_TOPIC;
-import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_STATISTIC_BROKER_TOPIC;
+import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_START_CRON;
+import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_STOP_CRON;
 import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_WEEK_ANALYSIS;
 
 
@@ -35,14 +38,14 @@ import static com.jeniatyt.bot.config.KafkaConfig.RESPONSE_WEEK_ANALYSIS;
 public class KListener {
     private final TelegramAnswerSender answerSender;
     private final ObjectMapper mapper;
-
+    
     
     @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_START_BROKER_TOPIC)
     public void startStopListener(String message) {
         try {
             CompanyMessageDto response = mapper.readValue(message, CompanyMessageDto.class);
             String data = response.getCompany() != null
-                ? "Найдена компания %s sicId %s"
+                ? "Найдена компания"
                 : response.getData();
             
             companyProcess(
@@ -57,16 +60,6 @@ public class KListener {
         }
     }
     
-    @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_STATISTIC_BROKER_TOPIC)
-    public void statisticListener(String message) {
-        try {
-            MessageDto dto = mapper.readValue(message, MessageDto.class);
-            answerSender.send(dto, RESPONSE_STATISTIC_BROKER_TOPIC);
-        } catch (JsonProcessingException e) {
-            log.error(RESPONSE_STATISTIC_BROKER_TOPIC, e);
-        }
-    }
-    
     @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_ALL_EXCLUDE_COMPANIES)
     public void allExcludeCompaniesListener(String message) {
         try {
@@ -78,6 +71,34 @@ public class KListener {
             );
         } catch (JsonProcessingException e) {
             log.error(RESPONSE_ALL_EXCLUDE_COMPANIES, e);
+        }
+    }
+    
+    @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_START_CRON)
+    public void startCronListener(String message) {
+        try {
+            MessageDto dto = mapper.readValue(message, MessageDto.class);
+            answerSender.send(
+                dto,
+                RESPONSE_START_CRON,
+                new StopCronButton(dto.getChatId(), getSecId(dto.getData())).get()
+            );
+        } catch (JsonProcessingException e) {
+            log.error(RESPONSE_START_CRON, e);
+        }
+    }
+    
+    @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_STOP_CRON)
+    public void endCronListener(String message) {
+        try {
+            MessageDto dto = mapper.readValue(message, MessageDto.class);
+            answerSender.send(
+                dto,
+                RESPONSE_STOP_CRON,
+                new ClearAllExcludeCompaniesButton().get()
+            );
+        } catch (JsonProcessingException e) {
+            log.error(RESPONSE_STOP_CRON, e);
         }
     }
     
@@ -100,7 +121,7 @@ public class KListener {
             CompanyMessageDto response = mapper.readValue(message, CompanyMessageDto.class);
             companyProcess(
                 response,
-                "Статистика за года" ,
+                "Статистика за года",
                 RESPONSE_HALF_YEAR_ANALYSIS,
                 ExcludeCompanyButton::new,
                 MonthCompanyInfoButton::new
@@ -158,6 +179,19 @@ public class KListener {
         }
     }
     
+    @KafkaListener(groupId = GROUP_ID, topics = RESPONSE_CRON)
+    public void responseCronListener(String message) {
+        try {
+            CompanyMessageDto response = mapper.readValue(message, CompanyMessageDto.class);
+            answerSender.send(
+                response,
+                RESPONSE_CLEAR_ALL_EXCLUDE_COMPANIES
+            );
+        } catch (JsonProcessingException e) {
+            log.error(RESPONSE_DAY_ANALYSIS, e);
+        }
+    }
+    
     private void companyProcess(
         CompanyMessageDto response,
         String data,
@@ -185,5 +219,10 @@ public class KListener {
         } else {
             answerSender.send(response, topic);
         }
+    }
+    
+    private String getSecId(String data) {
+        //TODO нужно реализовать
+        return null;
     }
 }

@@ -10,40 +10,44 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Optional;
 
-import static com.jeniatyt.bot.config.KafkaConfig.REQUEST_DAY_ANALYSIS;
+import static com.jeniatyt.bot.config.KafkaConfig.REQUEST_START_CRON;
 
 @Service
 @RequiredArgsConstructor
-public class DayCompanyInfoMessageHandlerImpl implements MessageHandler {
-    public static final String KEY_DCI = "dci";
+public class StartCronCheckCostMessageHandlerImpl implements MessageHandler {
+    public static final String KEY_SSCC = "sscc";
     
     private final MessageSender sender;
     
     @Override
     public int getOrder() {
-        return 7;
+        return 9;
     }
     
     @Override
     public String getKey() {
-        return KEY_DCI;
+        return KEY_SSCC;
     }
     
     @Override
     public String getDescription() {
-        return "Информация по компании за день [команда sicId]";
+        return """
+            Запускаем крон который,
+            присылает стоимость акций и дельту с покупки каждый час по будням, c 9 до 18
+            [команда secId цена-покупки]
+            """;
     }
     
     @Override
     public Optional<SendMessage> handle(Message message, String[] arg) {
         sender.send(
             new MessageDto(
-                KEY_DCI,
+                KEY_SSCC,
                 message.getChatId().toString(),
                 message.getMessageId(),
-                arg[0].toUpperCase()
+                getArguments(arg)
             ),
-            REQUEST_DAY_ANALYSIS
+            REQUEST_START_CRON
         );
     
         return Optional.empty();
