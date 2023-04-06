@@ -1,3 +1,5 @@
+import org.springframework.util.FileCopyUtils
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.3'
@@ -26,6 +28,16 @@ dependencies {
     implementation 'org.jfree:jfreechart:1.5.4'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+}
+
+bootJar {
+    File propertiesFile = new File(projectDir.toString() + "/src/main/resources/application-prod.yaml")
+    File propertiesFileForBuild = new File(buildDir.toString() + "/libs/application-prod.yaml")
+    FileCopyUtils.copy(propertiesFile, propertiesFileForBuild);
+
+    doLast {
+        "docker build -f DockerfIle -t jeniatyt/bot:latest .".execute()
+    }
 }
 
 tasks.named('test') {

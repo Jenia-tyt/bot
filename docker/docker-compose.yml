@@ -11,12 +11,13 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-compose:9092
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ADVERTISED_HOST_NAME=127.0.0.1
     healthcheck:
-      test: nc -z localhost 9092 || exit -1
+      test: nc -z kafka-compose 9092 || exit -1
       interval: 20s
       timeout: 5s
       retries: 3
@@ -25,17 +26,15 @@ services:
       resources:
         limits:
           memory: 256m
-    networks:
-      - local
 
   redis:
-    container_name: rc-redis-compose
+    container_name: redis-compose
     image: redis:alpine
     ports:
       - "6379:6379"
     restart: always
     healthcheck:
-      test: nc -z localhost 6379 || exit -1
+      test: nc -z redis-compose 6379 || exit -1
       interval: 20s
       timeout: 5s
       retries: 3
@@ -44,19 +43,42 @@ services:
       resources:
         limits:
           memory: 256m
-    networks:
-      - default
 
-#сюда надо добавить постгрес
+#тут прокинуть волюм
+  postgres:
+    image: library/postgres:${POSTGRES_IMAGE_TAG:-12}
+    container_name: postgres-compose
+    restart: on-failure
+    environment:
+      POSTGRES_USER: telegram
+      POSTGRES_PASSWORD: telegram
+      POSTGRES_DB: bot
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready -d postgres
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 256m
 
   bot:
     container_name: bot-compose
     image: jeniatyt/bot:latest
     restart: always
+    ports:
+      - "8080:8080"
     depends_on:
       - kafka
+    environment:
+      - PORT=8080
+      - KAFKA=kafka-compose
     healthcheck:
-      test: nc -z localhost 8080 || exit -1
+      test: nc -z bot-compose 8080 || exit -1
       interval: 20s
       timeout: 5s
       retries: 3
@@ -65,20 +87,24 @@ services:
       resources:
         limits:
           memory: 256m
-    networks:
-      - local
 
   bs:
     container_name: bs-compose
-    image: jeniatyt/bot:latest
+    image: jeniatyt/bs:latest
     ports:
       - "8084:8084"
     restart: always
+    environment:
+      - PORT=8084
+      - KAFKA=kafka-compose
+      - POSTGRES=postgres-compose
+      - REDIS=redis-compose
     depends_on:
       - kafka
       - redis
+      - postgres
     healthcheck:
-      test: nc -z localhost 8084 || exit -1
+      test: nc -z bs-compose 8084 || exit -1
       interval: 20s
       timeout: 5s
       retries: 3
@@ -87,6 +113,3 @@ services:
       resources:
         limits:
           memory: 256m
-
-networks:
-  local:

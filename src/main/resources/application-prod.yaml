@@ -1,3 +1,6 @@
+server:
+  port: ${PORT}
+
 bot:
   name: broker
   token: 5918374980:AAHLNor9QvhckZJB8OgglLOm-WYqNGTYd9Y
@@ -6,7 +9,7 @@ spring:
   application:
     name: bot
   kafka:
-    bootstrap-servers: {{KAFKA_URL}}:9092
+    bootstrap-servers: ${KAFKA}:9092
     consumer.auto-offset-reset: earliest
 
 chart:
