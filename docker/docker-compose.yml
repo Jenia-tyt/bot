@@ -46,17 +46,20 @@ services:
 
 #тут прокинуть волюм
   postgres:
-    image: library/postgres:${POSTGRES_IMAGE_TAG:-12}
+    image: library/postgres:${POSTGRES_IMAGE_TAG:-14}
     container_name: postgres-compose
     restart: on-failure
     environment:
+      POSTGRES_DB: bot
+      PGUSER: telegram
       POSTGRES_USER: telegram
       POSTGRES_PASSWORD: telegram
-      POSTGRES_DB: bot
+    expose:
+      - "5432"
     ports:
       - "5432:5432"
     healthcheck:
-      test: pg_isready -d postgres
+      test: [ "CMD-SHELL", "pg_isready -d bot -U telegram"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -78,11 +81,9 @@ services:
       - PORT=8080
       - KAFKA=kafka-compose
     healthcheck:
-      test: nc -z bot-compose 8080 || exit -1
-      interval: 20s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+      test: ["CMD", "java", "-jar", "./bot.jar", "localhost", "8080"]
+      interval: 30s
+      retries: 10
     deploy:
       resources:
         limits:
@@ -99,16 +100,17 @@ services:
       - KAFKA=kafka-compose
       - POSTGRES=postgres-compose
       - REDIS=redis-compose
+      - DB=bot
+      - USER=telegram
+      - PASSWORD=telegram
     depends_on:
       - kafka
       - redis
       - postgres
     healthcheck:
-      test: nc -z bs-compose 8084 || exit -1
-      interval: 20s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+      test: [ "CMD", "java", "-jar", "./bs.jar", "localhost", "8080" ]
+      interval: 30s
+      retries: 10
     deploy:
       resources:
         limits:

@@ -31,15 +31,28 @@ dependencies {
 }
 
 bootJar {
+    new File(buildDir.toString() + "/libs").listFiles().each {it.delete()}
+
     File propertiesFile = new File(projectDir.toString() + "/src/main/resources/application-prod.yaml")
     File propertiesFileForBuild = new File(buildDir.toString() + "/libs/application-prod.yaml")
     FileCopyUtils.copy(propertiesFile, propertiesFileForBuild);
 
     doLast {
-        "docker build -f DockerfIle -t jeniatyt/bot:latest .".execute()
+        print execute("docker build -f Dockerfile -t jeniatyt/bot:latest .", 600000)
     }
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+static String execute(String command, Integer time) {
+    def sout = new StringBuffer(), serr = new StringBuffer()
+    def proc = command.execute()
+    proc.waitForProcessOutput(sout, serr)
+    proc.waitForOrKill(time)
+    if (!serr.isEmpty()) {
+        return serr.toString()
+    }
+    return sout.toString()
 }

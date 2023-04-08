@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM openjdk:17-ea-jdk-oracle
 
 ARG JAR_FILE=build/libs/bot-0.0.1-SNAPSHOT.jar
 ARG PROP=build/libs/application-prod.yaml
