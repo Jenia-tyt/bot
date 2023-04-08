@@ -23,6 +23,7 @@ repositories {
 dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.kafka:spring-kafka:3.0.3'
     implementation 'org.telegram:telegrambots:6.5.0'
     implementation 'org.jfree:jfreechart:1.5.4'
